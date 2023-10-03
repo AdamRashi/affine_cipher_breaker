@@ -1,6 +1,11 @@
-from configs import CODE_TO_LETTER, LETTER_TO_CODE
+from math import gcd
 
-ALPHABET_SIZE = 26
+from configs import CODE_TO_LETTER, LETTER_TO_CODE, ALPHABET_SIZE
+
+
+def is_coprime(a, b):
+    """Check if two numbers are coprime."""
+    return gcd(a, b) == 1
 
 
 def to_cipher(text: str, key_a: int, key_b: int) -> str:
@@ -9,10 +14,18 @@ def to_cipher(text: str, key_a: int, key_b: int) -> str:
     symmetric cryptography algorithm with given keys <a> and <b>.
     """
     text = text.upper()
+
+    if not is_coprime(key_a, ALPHABET_SIZE):
+        raise ValueError("Key 'a' must be coprime with the alphabet size.")
+
     ciphertext = ''
-    for letter in text:
-        cipher_code = (LETTER_TO_CODE[letter] * key_a + key_b) % ALPHABET_SIZE
-        ciphertext += CODE_TO_LETTER[cipher_code]
+    for char in text:
+        if char.isalpha():  # Check if the character is a letter
+            cipher_code = (LETTER_TO_CODE[char] * key_a + key_b) % ALPHABET_SIZE
+            ciphertext += CODE_TO_LETTER[cipher_code]
+        else:
+            # If it's not a letter, leave it unchanged
+            ciphertext += char
 
     return ciphertext
 
@@ -35,8 +48,12 @@ def to_decipher(text: str, key_a: int, key_b: int):
     """
     reciprocal_to_a = find_reciprocal(key_a, ALPHABET_SIZE)
     decrypted_text = ''
-    for letter in text:
-        original_code = (reciprocal_to_a * (LETTER_TO_CODE[letter] - key_b)) % ALPHABET_SIZE
-        decrypted_text += CODE_TO_LETTER[original_code]
+
+    for char in text:
+        if char.isalpha():
+            original_code = (reciprocal_to_a * (LETTER_TO_CODE[char] - key_b)) % ALPHABET_SIZE
+            decrypted_text += CODE_TO_LETTER[original_code]
+        else:
+            decrypted_text += char
 
     return decrypted_text
