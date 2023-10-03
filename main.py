@@ -17,5 +17,3 @@ args = args.parse_args()
 FILE_PATH: str = args.FilePath
 A: int = args.KeyA
 B: int = args.KeyB
-
-

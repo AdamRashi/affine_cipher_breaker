@@ -21,6 +21,8 @@ def to_cipher(text: str, key_a: int, key_b: int) -> str:
     ciphertext = ''
     for char in text:
         if char.isalpha():  # Check if the character is a letter
+            if char == 'Ё':
+                char = 'Е'
             cipher_code = (LETTER_TO_CODE[char] * key_a + key_b) % ALPHABET_SIZE
             ciphertext += CODE_TO_LETTER[cipher_code]
         else:

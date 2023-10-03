@@ -7,6 +7,3 @@ CODE_TO_LETTER = {
 }
 
 ALPHABET_SIZE = len(LETTER_TO_CODE)
-
-# print(CODE_TO_LETTER)
-# print(ALPHABET_SIZE)

@@ -21,19 +21,6 @@ RUSSIAN_LETTER_FREQUENCIES = {
 }
 
 
-def calculate_chi_squared(observed_frequencies, expected_frequencies, text):
-    """
-    Calculate the chi-squared statistic to measure the difference
-    between observed and expected frequencies.
-    """
-    chi_squared = 0
-    for letter, observed in observed_frequencies.items():
-        if letter.isalpha():
-            expected = expected_frequencies[letter] * len(text)
-            chi_squared += ((observed - expected) ** 2) / expected
-    return chi_squared
-
-
 def affine_break_with_frequency_analysis(ciphertext, misspell_threshold=1):
     """
     Break the Affine cipher using letter frequency analysis for the Russian language.
@@ -57,8 +44,11 @@ def affine_break_with_frequency_analysis(ciphertext, misspell_threshold=1):
 
     spell = SpellChecker('ru')
     checked_results = []
-    for text in results:
-        if len(spell.unknown([word.strip(string.punctuation) for word in text.split()])) <= misspell_threshold:
-            checked_results.append(text)
+
+    while len(checked_results) == 0:
+        misspell_threshold += 1
+        for text in results:
+            if len(spell.unknown([word.strip(string.punctuation) for word in text.split()])) <= misspell_threshold:
+                checked_results.append(text)
 
     return checked_results
