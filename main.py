@@ -19,5 +19,3 @@ A: int = args.KeyA
 B: int = args.KeyB
 
 
-# with open(FILE_PATH, 'r') as file:
-    #
