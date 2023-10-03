@@ -5,7 +5,6 @@ using known quantities of letters in given text and the
 common quantities of letters in corresponding language
 """
 import string
-from collections import Counter
 
 from spellchecker import SpellChecker
 
@@ -39,7 +38,7 @@ def affine_break_with_frequency_analysis(ciphertext, misspell_threshold=1):
     """
     Break the Affine cipher using letter frequency analysis for the Russian language.
     """
-    chi_squared_values = []
+    results = []
 
     for key_a in range(1, ALPHABET_SIZE):
         if is_coprime(key_a, ALPHABET_SIZE):
@@ -54,18 +53,11 @@ def affine_break_with_frequency_analysis(ciphertext, misspell_threshold=1):
                         else:
                             decrypted_text += char
 
-                    # Calculate chi-squared value for the decrypted text
-                    chi_squared = calculate_chi_squared(dict(Counter(decrypted_text)), RUSSIAN_LETTER_FREQUENCIES,
-                                                        decrypted_text)
-                    chi_squared_values.append((key_a, key_b, chi_squared, decrypted_text))
-
-    # sort by the smallest chi-squared value (lower value indicates a better match)
-    sorted_results = sorted(chi_squared_values, key=lambda x: -x[2])
+                    results.append(decrypted_text)
 
     spell = SpellChecker('ru')
     checked_results = []
-    for result in sorted_results:
-        text = result[3]
+    for text in results:
         if len(spell.unknown([word.strip(string.punctuation) for word in text.split()])) <= misspell_threshold:
             checked_results.append(text)
 
